@@ -152,6 +152,8 @@ PROGNAME=${0##*/}
 VERSION="1.76"
 
 # defaults
+CURL="curl"
+PROXY=""
 CODE_LOCATION="https://raw.githubusercontent.com/srvrco/getssl/master/getssl"
 CA="https://acme-staging.api.letsencrypt.org"
 DEFAULT_REVOKE_CA="https://acme-v01.api.letsencrypt.org"
@@ -267,7 +269,7 @@ check_challenge_completion() { # checks with the ACME server if our challenge is
 }
 
 check_getssl_upgrade() { # check if a more recent version of code is available available
-  latestcode=$(curl --silent "$CODE_LOCATION")
+  latestcode=$($CURL --silent "$CODE_LOCATION")
   errcode=$?
   if [ $errcode -eq 60 ]; then
     error_exit "your version of curl needs updating, as it does not support SNI (multiple SSL domains on a single IP)"
@@ -555,7 +557,7 @@ get_certificate() { # get certificate for csr, if all domains validated.
   debug "certdata location = $CertData"
   if [ "$CertData" ] ; then
     echo -----BEGIN CERTIFICATE----- > "$gc_certfile"
-    curl --silent "$CertData" | openssl base64 -e  >> "$gc_certfile"
+    $CURL --silent "$CertData" | openssl base64 -e  >> "$gc_certfile"
     echo -----END CERTIFICATE-----  >> "$gc_certfile"
     info "Certificate saved in $CERT_FILE"
   fi
@@ -571,7 +573,7 @@ get_certificate() { # get certificate for csr, if all domains validated.
   IssuerData=$(grep -i '^Link' "$CURL_HEADER" | cut -d " " -f 2| cut -d ';' -f 1 | sed 's/<//g' | sed 's/>//g')
   if [ "$IssuerData" ] ; then
     echo -----BEGIN CERTIFICATE----- > "$gc_cafile"
-    curl --silent "$IssuerData" | openssl base64 -e  >> "$gc_cafile"
+    $CURL --silent "$IssuerData" | openssl base64 -e  >> "$gc_cafile"
     echo -----END CERTIFICATE-----  >> "$gc_cafile"
     info "The intermediate CA cert is in $gc_cafile"
   fi
@@ -804,7 +806,7 @@ send_signed_request() { # Sends a request to the ACME server, signed with your p
 
   CURL_HEADER="$TEMP_DIR/curl.header"
   dp="$TEMP_DIR/curl.dump"
-  CURL="curl --silent --dump-header $CURL_HEADER "
+  CURL="$CURL --silent --dump-header $CURL_HEADER "
   if [ ${_USE_DEBUG} -eq 1 ]; then
     CURL="$CURL --trace-ascii $dp "
   fi
@@ -1143,7 +1145,7 @@ if [[ $_REVOKE -eq 1 ]]; then
 fi
 
 # get latest agreement from CA (as default)
-AGREEMENT=$(curl -I "${CA}/terms" 2>/dev/null | awk '$1 ~ "Location:" {print $2}'|tr -d '\r')
+AGREEMENT=$($CURL -I "${CA}/terms" 2>/dev/null | awk '$1 ~ "Location:" {print $2}'|tr -d '\r')
 
 # if nothing in command line, print help and exit.
 if [ -z "$DOMAIN" ] && [ ${_CHECK_ALL} -ne 1 ]; then
@@ -1173,6 +1175,11 @@ TEMP_DIR="$DOMAIN_DIR/tmp"
 
 # Set the OPENSSL_CONF environment variable so openssl knows which config to use
 export OPENSSL_CONF=$SSLCONF
+
+# set up curl to use your proxy (if defined)
+if [ -n "$PROXY" ]; then
+	CURL="$CURL -x \"$PROXY\""
+fi
 
 # if "-a" option then check other parameters and create run for each domain.
 if [ ${_CHECK_ALL} -eq 1 ]; then
@@ -1617,7 +1624,7 @@ for d in $alldomains; do
       debug wellknown_url "$wellknown_url"
 
       # check that we can reach the challenge ourselves, if not, then error
-      if [ ! "$(curl -k --silent --location "$wellknown_url")" == "$keyauthorization" ]; then
+      if [ ! "$($CURL -k --silent --location "$wellknown_url")" == "$keyauthorization" ]; then
         error_exit "for some reason could not reach $wellknown_url - please check it manually"
       fi
 

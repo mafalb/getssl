@@ -40,6 +40,7 @@ PRIVATE_KEY_ALG="rsa"
 SERVER_TYPE="https"
 CHECK_REMOTE="true"
 DNS_EXTRA_WAIT=0
+PROXY=""
 
 clean_up() { # Perform pre-exit housekeeping
   return
@@ -146,6 +147,9 @@ write_getssl_template() { # write out the main template file
 	# openssl config file.  The default should work in most cases.
 	SSLCONF="$SSLCONF"
 
+	# Define proxy settings
+	PROXY="$PROXY"
+
 	# Use the following 3 variables if you want to validate via DNS
 	#VALIDATE_VIA_DNS="true"
 	#DNS_ADD_COMMAND=
@@ -165,6 +169,9 @@ write_domain_template() { # write out a template file for a domain.
 	CA="$CA"
 
 	AGREEMENT="$AGREEMENT"
+	
+	# Define proxy settings
+	PROXY="$PROXY"
 
 	ACCOUNT_EMAIL="$ACCOUNT_EMAIL"
 	ACCOUNT_KEY_LENGTH=$ACCOUNT_KEY_LENGTH
@@ -265,6 +272,11 @@ fi
 get_user_input "What is the working directory for getssl" "$WORKING_DIR" \
     "The working directory is where getssl saves all the config and certifcates"
 WORKING_DIR=$res
+
+# prompt for proxy settings
+get_user_input "Proxy" "$PROXY" \
+    "The proxy that will used to make requests"
+PROXY=$res
 
 # if the "working directory" doesn't exist, then create it.
 if [ ! -d "$WORKING_DIR" ]; then
