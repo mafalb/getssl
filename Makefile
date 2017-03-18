@@ -21,8 +21,8 @@ endif
 
 	install -Dm755 getssl $(DESTDIR)/usr/bin/getssl
 	
-	install -dm755 $(DESTDIR)/usr/share/getssl
-	cp -r *_scripts $(DESTDIR)/usr/share/getssl
+	install -dm755 $(DESTDIR)/usr/libexec/getssl
+	cp -r *_scripts $(DESTDIR)/usr/libexec/getssl
 
 .PHONY: install
 
