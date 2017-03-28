@@ -23,17 +23,17 @@ Obtain SSL certificates from the letsencrypt.org ACME server.  Suitable for auto
 
 Features:
 
-* **Bash** - It runs on virtually all linux machines, including BSD, Slackware, MAC OSX.
-* **Get certificates for remote servers** - The tokens used to provide validation of domain ownership, and the certificates themselves can be automatically copied to remote servers (via ssh, sftp or ftp for tokens). The script doesn't need to run on the server itself. This can be useful if you don't have access to run such scripts on the server itself, as it's a shared server for example.
-* **Runs as a daily cron** - so certificates will be automatically renewed when required.
-* **Automatic certificate renewals**
-* **Checks certificates are correctly loaded**. After installation of a new certificate it will test the port specified ( see [Server-Types](#server-types) for options ) that the certificate is actually being used correctly.
-* **Automatically updates** - The script can automatically update itself with bug fixes etc if required.
-* **Extensively configurable** - With a simple configuration file for each certificate it is possible to configure it exactly for your needs, whether a simple single domain or multiple domains across multiple servers on the same certificate.
-* **Supports http and dns challenges** - Full ACME implementation
-* **Simple and easy to use**
-* **Detailed debug info** - Whilst it shouldn't be needed, detailed debug information is available.
-* **Reload services** - After a new certificate is obtained then the relevant services (e.g. apache/nginx/postfix) can be reloaded.
+- Bash - It runs on virtually all linux machines, including BSD, Slackware, MAC OSX.
+- Get certificates for remote servers - The tokens used to provide validation of domain ownership, and the certificates themselves can be automatically copied to remote servers (via ssh, sftp or ftp for tokens). The script doesn't need to run on the server itself. This can be useful if you don't have access to run such scripts on the server itself, as it's a shared server for example.
+- Runs as a daily cron - so certificates will be automatically renewed when required.
+- Automatic certificate renewals
+- Checks certificates are correctly loaded. After installation of a new certificate it will test the port specified ( see [Server-Types](#server-types) for options ) that the certificate is actually being used correctly.
+- Automatically updates - The script can automatically update itself with bug fixes etc if required.
+- Extensively configurable - With a simple configuration file for each certificate it is possible to configure it exactly for your needs, whether a simple single domain or multiple domains across multiple servers on the same certificate.
+- Supports http and dns challenges - Full ACME implementation
+- Simple and easy to use
+- Detailed debug info - Whilst it shouldn't be needed, detailed debug information is available.
+- Reload services - After a new certificate is obtained then the relevant services (e.g. apache/nginx/postfix) can be reloaded.
 
 %prep
 %setup -q
@@ -63,5 +63,8 @@ DESTDIR=$RPM_BUILD_ROOT make install
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
-* Thu Oct 20 2016 Markus Falb <markus.falb@mafalb.at> - 1.61
+* Thu Oct 20 2016 Markus Falb <rpm@mafalb.at> - 1.61
 - Build rpm
+* Tue Mar 28 2017 Markus Falb <rpm@mafalb.at> - 2.10
+- Bump version to 2.10
+
