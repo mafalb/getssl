@@ -66,8 +66,8 @@ DESTDIR=$RPM_BUILD_ROOT make install
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
-* Thu Oct 20 2016 Markus Falb <rpm@mafalb.at> - 1.61
-- Build rpm
 * Tue Mar 28 2017 Markus Falb <rpm@mafalb.at> - 2.10
 - Bump version to 2.10
+* Thu Oct 20 2016 Markus Falb <rpm@mafalb.at> - 1.61
+- Build rpm
 
