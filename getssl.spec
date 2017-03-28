@@ -37,6 +37,9 @@ Features:
 
 %prep
 %setup -q
+%if 0%{?rhel} == 5
+mv -f getssl-nosni getssl
+%endif
 
 %build
 
