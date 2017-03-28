@@ -475,7 +475,7 @@ check_getssl_upgrade() { # check if a more recent version of code is available a
     else
       info ""
       info "A more recent version (v${latestversion}) of getssl is available, please update"
-      info "the easiest way is to use the -u or --upgrade flag"
+      info "Use your package manager to upgrade"
       info ""
     fi
   fi
@@ -944,7 +944,6 @@ help_message() { # print out the help message
 	  -q, --quiet        Quiet mode (only outputs on error, success of new cert, or getssl was upgraded)
 	  -Q, --mute         Like -q, but mutes notification about successful upgrade
 	  -r, --revoke   "cert" "key" [CA_server] Revoke a certificate (the cert and key are required)
-	  -u, --upgrade      Upgrade getssl if a more recent version is available
 	  -k, --keep     "#" Maximum amount of old getssl versions to keep when upgrading
 	  -U, --nocheck      Do not check if a more recent version is available
 	  -w working_dir "Working directory"
@@ -1271,7 +1270,7 @@ urlbase64() { # urlbase64: base64 encoded string with '+' replaced with '-' and 
 
 usage() { # echos out the program usage
   echo "Usage: $PROGNAME [-h|--help] [-d|--debug] [-c|--create] [-f|--force] [-a|--all] [-q|--quiet]"\
-       "[-Q|--mute] [-u|--upgrade] [-k|--keep #] [-U|--nocheck] [-r|--revoke cert key] [-w working_dir] domain"
+       "[-Q|--mute] [-k|--keep #] [-U|--nocheck] [-r|--revoke cert key] [-w working_dir] domain"
 }
 
 write_domain_template() { # write out a template file for a domain.
@@ -1409,7 +1408,7 @@ while [[ -n ${1+defined} ]]; do
      shift
      REVOKE_CA="$1" ;;
     -u | --upgrade)
-     _UPGRADE=1 ;;
+     _UPGRADE=0 ;;
     -U | --nocheck)
       _UPGRADE_CHECK=0 ;;
     -w)
