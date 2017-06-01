@@ -490,7 +490,7 @@ clean_up() { # Perform pre-exit housekeeping
       # shellcheck source=/dev/null
       . "$dnsfile"
       debug "attempting to clean up DNS entry for $d"
-      eval "$DNS_DEL_COMMAND" "$d" "$auth_key"
+      eval "$DNS_DEL_COMMAND" "$d" "$auth_key" "$DNS_EXTRA_ARGS"
     done
     shopt -u nullglob
   fi
@@ -1855,8 +1855,8 @@ for d in $alldomains; do
                  | sed -e 's:=*$::g' -e 'y:+/:-_:')
       debug auth_key "$auth_key"
 
-      debug "adding dns via command: $DNS_ADD_COMMAND $d $auth_key"
-      if ! eval "$DNS_ADD_COMMAND" "$d" "$auth_key" ; then
+      debug "adding dns via command: $DNS_ADD_COMMAND $d $auth_key $DNS_EXTRA_ARGS"
+      if ! eval "$DNS_ADD_COMMAND" "$d" "$auth_key" "$DNS_EXTRA_ARGS"; then
         error_exit "DNS_ADD_COMMAND failed for domain $d"
       fi
 
@@ -2024,7 +2024,7 @@ if [[ $VALIDATE_VIA_DNS == "true" ]]; then
       check_challenge_completion "$uri" "$d" "$keyauthorization"
 
       debug "remove DNS entry"
-      eval "$DNS_DEL_COMMAND" "$d" "$auth_key"
+      eval "$DNS_DEL_COMMAND" "$d" "$auth_key" "$DNS_EXTRA_ARGS"
       # remove $dnsfile after each loop.
       rm -f "$dnsfile"
     fi
