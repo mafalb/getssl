@@ -1,6 +1,6 @@
 Name:           getssl
 Version:        2.10
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Obtain SSL certificates from the letsencrypt.org ACME server.
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}
@@ -66,6 +66,8 @@ DESTDIR=$RPM_BUILD_ROOT make install
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Thu Jun 1 2017 Markus Falb <rpm@mafalb.at> - 2.10
+- changes to nsupdate scripts
 * Tue Mar 28 2017 Markus Falb <rpm@mafalb.at> - 2.10
 - Bump version to 2.10
 * Thu Oct 20 2016 Markus Falb <rpm@mafalb.at> - 1.61
